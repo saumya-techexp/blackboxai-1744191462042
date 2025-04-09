@@ -1,0 +1,90 @@
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">Your Shopping Cart</h1>
+
+    <% if (cartItems.length === 0) { %>
+        <div class="bg-white rounded-lg shadow-md p-8 text-center">
+            <i class="fas fa-shopping-cart text-5xl text-gray-400 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+            <p class="text-gray-600 mb-4">Browse our products to add items to your cart</p>
+            <a href="/consumer" 
+               class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition duration-200">
+                Browse Products
+            </a>
+        </div>
+    <% } else { %>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <% cartItems.forEach(item => { %>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <% if (item.product.imageUrl) { %>
+                                        <img class="h-10 w-10 rounded-full object-cover mr-4" src="<%= item.product.imageUrl %>" alt="<%= item.product.name %>">
+                                    <% } else { %>
+                                        <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-4">
+                                            <i class="fas fa-box-open text-gray-400"></i>
+                                        </div>
+                                    <% } %>
+                                    <div>
+                                        <div class="font-medium text-gray-900"><%= item.product.name %></div>
+                                        <div class="text-sm text-gray-500">By: <%= item.product.householder.name %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ₹<%= item.product.price %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <form action="/consumer/cart/<%= item._id %>" method="POST" class="flex items-center">
+                                    <input type="number" name="quantity" min="1" value="<%= item.quantity %>" 
+                                           class="w-20 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <button type="submit" class="ml-2 text-indigo-600 hover:text-indigo-900">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                ₹<%= (item.product.price * item.quantity).toFixed(2) %>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <form action="/consumer/cart/<%= item._id %>?_method=DELETE" method="POST">
+                                    <button type="submit" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-50">
+                        <td colspan="3" class="px-6 py-4 text-right font-medium text-gray-500 uppercase">Total</td>
+                        <td class="px-6 py-4 text-sm font-bold">₹<%= totalAmount.toFixed(2) %></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="/consumer" 
+               class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition duration-200">
+                Continue Shopping
+            </a>
+            <a href="/consumer/checkout" 
+               class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-200">
+                Proceed to Checkout
+            </a>
+        </div>
+    <% } %>
+</div>
