@@ -1,13 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const flash = require('connect-flash');
 const path = require('path');
 mongoose.set('strictQuery', false);
 
 const app = express();
 
-// MongoDB connection URI
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/grihutpaad';
+// MongoDB Atlas connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://saumyadeeptechie:nM5hkjiFFUmVFpba@cluster0.ugtsidf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 async function connectDB() {
   try {
@@ -37,6 +39,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }));
+app.use(flash());
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
