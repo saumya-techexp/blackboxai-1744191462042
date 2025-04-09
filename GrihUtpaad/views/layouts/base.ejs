@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'GrihUtpaad - Homegrown Products Marketplace' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        },
+                        warning: {
+                            50: '#fefce8',
+                            100: '#fef9c3',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+        .nav-link.active {
+            border-bottom-width: 2px;
+            border-color: #3b82f6;
+        }
+        .dropdown-enter {
+            transition: all 0.2s ease-out;
+        }
+        .dropdown-enter-from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .dropdown-enter-to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Flash Messages -->
+    <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+        <div class="fixed top-4 right-4 z-50 animate-fade-in">
+            <div class="bg-success-50 border-l-4 border-success-500 p-4 rounded-lg shadow-lg">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-success-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-success-800">
+                            <%= success %>
+                        </p>
+                    </div>
+                    <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-success-500 hover:text-success-600 rounded-lg focus:ring-2 focus:ring-success-400">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="fixed top-4 right-4 z-50 animate-fade-in">
+            <div class="bg-danger-50 border-l-4 border-danger-500 p-4 rounded-lg shadow-lg">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-danger-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-danger-800">
+                            <%= error %>
+                        </p>
+                    </div>
+                    <button type="button" class="ml-auto -mx-1.5 -my-1.5 p-1.5 text-danger-500 hover:text-danger-600 rounded-lg focus:ring-2 focus:ring-danger-400">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    
+    <%- include('../partials/navbar') %>
+
+    <!-- Main Content -->
+    <main class="flex-grow py-8">
+        <%- body %>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+    <!-- Scripts -->
+    <script>
+        // Flash message auto-dismiss
+        document.querySelectorAll('[data-dismiss="flash"]').forEach(button => {
+            button.addEventListener('click', () => {
+                button.closest('.fixed').remove();
+            });
+        });
+
+        // Auto-dismiss flash messages after 5 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.fixed[class*="animate-fade-in"]').forEach(el => {
+                el.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 5000);
+
+        // Add animation classes
+        document.body.classList.add('transition-colors', 'duration-200');
+    </script>
+</body>
+</html>
