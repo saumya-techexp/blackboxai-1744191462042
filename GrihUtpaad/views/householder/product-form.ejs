@@ -1,0 +1,158 @@
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium">
+                <%= product ? 'Edit Product' : 'Add New Product' %>
+            </h2>
+        </div>
+        <form action="<%= product ? `/householder/products/${product._id}?_method=PUT` : '/householder/products' %>" 
+              method="POST" enctype="multipart/form-data">
+            <div class="p-6 space-y-6">
+                <% if (error) { %>
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">
+                                    <%= error %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Product Name *</label>
+                        <input type="text" name="name" id="name" required
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                               value="<%= product ? product.name : oldInput.name || '' %>">
+                    </div>
+
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category *</label>
+                        <select id="category" name="category" required
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="">Select Category</option>
+                            <option value="Vegetables" <%= (product && product.category === 'Vegetables') || oldInput.category === 'Vegetables' ? 'selected' : '' %>>Vegetables</option>
+                            <option value="Fruits" <%= (product && product.category === 'Fruits') || oldInput.category === 'Fruits' ? 'selected' : '' %>>Fruits</option>
+                            <option value="Dairy" <%= (product && product.category === 'Dairy') || oldInput.category === 'Dairy' ? 'selected' : '' %>>Dairy</option>
+                            <option value="Bakery" <%= (product && product.category === 'Bakery') || oldInput.category === 'Bakery' ? 'selected' : '' %>>Bakery</option>
+                            <option value="Grains" <%= (product && product.category === 'Grains') || oldInput.category === 'Grains' ? 'selected' : '' %>>Grains</option>
+                            <option value="Other" <%= (product && product.category === 'Other') || oldInput.category === 'Other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description *</label>
+                    <textarea id="description" name="description" rows="3" required
+                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"><%= product ? product.description : oldInput.description || '' %></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price (₹) *</label>
+                        <input type="number" name="price" id="price" min="1" step="0.01" required
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                               value="<%= product ? product.price : oldInput.price || '' %>">
+                    </div>
+
+                    <div>
+                        <label for="stock" class="block text-sm font-medium text-gray-700">Stock Quantity *</label>
+                        <input type="number" name="stock" id="stock" min="1" required
+                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                               value="<%= product ? product.stock : oldInput.stock || '' %>">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                    <% if (product && product.imageUrl) { %>
+                        <div class="mt-2 flex items-center">
+                            <img src="<%= product.imageUrl %>" alt="Current product image" class="h-16 w-16 rounded-md object-cover">
+                            <div class="ml-4">
+                                <label for="removeImage" class="flex items-center">
+                                    <input type="checkbox" id="removeImage" name="removeImage" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    <span class="ml-2 text-sm text-gray-700">Remove current image</span>
+                                </label>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        <div class="space-y-1 text-center">
+                            <div class="flex text-sm text-gray-600">
+                                <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>Upload a file</span>
+                                    <input id="image" name="image" type="file" class="sr-only" accept="image/*">
+                                </label>
+                                <p class="pl-1">or drag and drop</p>
+                            </div>
+                            <p class="text-xs text-gray-500">
+                                PNG, JPG, GIF up to 5MB
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center">
+                    <input id="isActive" name="isActive" type="checkbox"
+                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                           <%= (product && product.isActive) || (!product && oldInput.isActive !== 'false') ? 'checked' : '' %>>
+                    <label for="isActive" class="ml-2 block text-sm text-gray-900">
+                        Make this product active
+                    </label>
+                </div>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                <a href="/householder" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Cancel
+                </a>
+                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <%= product ? 'Update Product' : 'Add Product' %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Simple drag and drop functionality
+    const dropArea = document.querySelector('.border-dashed');
+    const fileInput = document.getElementById('image');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+        dropArea.classList.add('border-indigo-500', 'bg-indigo-50');
+    }
+
+    function unhighlight() {
+        dropArea.classList.remove('border-indigo-500', 'bg-indigo-50');
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+    }
+</script>
