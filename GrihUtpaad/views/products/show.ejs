@@ -1,0 +1,113 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="md:flex">
+            <div class="md:w-1/2">
+                <% if (product.imageUrl) { %>
+                    <img class="h-full w-full object-cover" src="<%= product.imageUrl %>" alt="<%= product.name %>">
+                <% } else { %>
+                    <div class="h-full w-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-box-open text-9xl text-gray-400"></i>
+                    </div>
+                <% } %>
+            </div>
+            <div class="p-8 md:w-1/2">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900"><%= product.name %></h1>
+                        <p class="text-sm text-gray-500">By: <%= product.householder.name %></p>
+                    </div>
+                    <div class="text-2xl font-bold text-indigo-600">₹<%= product.price %></div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="flex items-center mb-2">
+                        <div class="flex items-center">
+                            <% for(let i = 1; i <= 5; i++) { %>
+                                <i class="fas fa-star <%= i <= (product.rating || 0) ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                            <% } %>
+                        </div>
+                        <span class="ml-2 text-sm text-gray-600">
+                            <%= product.reviews.length %> <%= product.reviews.length === 1 ? 'review' : 'reviews' %>
+                        </span>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="text-sm font-medium text-gray-900">Description</h3>
+                        <div class="mt-2 text-sm text-gray-600">
+                            <%= product.description %>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-gray-900">Details</h3>
+                        <div class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div>
+                                <span class="font-medium">Category:</span> <%= product.category %>
+                            </div>
+                            <div>
+                                <span class="font-medium">Stock:</span> <%= product.stock %>
+                            </div>
+                            <div>
+                                <span class="font-medium">Location:</span> <%= product.householder.location %>
+                            </div>
+                            <div>
+                                <span class="font-medium">Posted:</span> <%= new Date(product.createdAt).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <form action="/consumer/cart" method="POST">
+                            <input type="hidden" name="productId" value="<%= product._id %>">
+                            <div class="flex items-center">
+                                <label for="quantity" class="mr-4 text-sm font-medium text-gray-700">Quantity</label>
+                                <select id="quantity" name="quantity" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                    <% for(let i = 1; i <= Math.min(10, product.stock); i++) { %>
+                                        <option value="<%= i %>"><%= i %></option>
+                                    <% } %>
+                                </select>
+                                <button type="submit" 
+                                        class="ml-4 flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 px-8 py-6">
+            <h2 class="text-lg font-medium text-gray-900">Reviews</h2>
+            <% if (product.reviews.length === 0) { %>
+                <p class="mt-2 text-sm text-gray-600">No reviews yet</p>
+            <% } else { %>
+                <div class="mt-4 space-y-6">
+                    <% product.reviews.forEach(review => { %>
+                        <div class="border-b border-gray-200 pb-6 last:border-0 last:pb-0">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium"><%= review.user.name %></p>
+                                    <div class="flex items-center">
+                                        <% for(let i = 1; i <= 5; i++) { %>
+                                            <i class="fas fa-star <%= i <= review.rating ? 'text-yellow-400' : 'text-gray-300' %> text-xs"></i>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2 ml-14">
+                                <p class="text-sm text-gray-600"><%= review.comment %></p>
+                                <p class="mt-1 text-xs text-gray-500">
+                                    <%= new Date(review.createdAt).toLocaleDateString() %>
+                                </p>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
