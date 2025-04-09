@@ -1,0 +1,29 @@
+<%- include('layouts/base') -%>
+
+<%- include('partials/navbar') -%>
+
+<main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Welcome to GrihUtpaad</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">For Consumers</h2>
+            <p class="mb-4">Browse and purchase products from local households.</p>
+            <a href="/consumer" class="btn btn-primary">Consumer Dashboard</a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">For Householders</h2>
+            <p class="mb-4">List and manage your household products.</p>
+            <a href="/householder" class="btn btn-primary">Householder Dashboard</a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">For Admins</h2>
+            <p class="mb-4">Manage the platform and users.</p>
+            <a href="/admin" class="btn btn-primary">Admin Dashboard</a>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') -%>
